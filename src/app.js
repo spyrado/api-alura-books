@@ -30,9 +30,20 @@ app.get('/livros', async (req, res) => {
   res.status(200).json(listaLivros);
 });
 
-app.get('/livros/:id', (req, res) => {
-  const index = buscarLivro(req.params.id);
-  res.status(200).json(livros[index]);
+app.get('/livros/:id', async (req, res) => {
+  try {
+    const livroItem = await livro.findById(req.params.id);
+    res.status(200).json(livroItem);
+  } catch (error) {
+    console.log(
+      `
+      ================= FALHA AO BUSCAR O LIVRO POR ID =================
+      >>> ERRO: ${JSON.stringify(error)}
+      `
+    );
+    res.status(404).send();
+  }
+  // const index = buscarLivro(req.params.id);
 });
 
 app.put('/livros/:id', (req, res) => {
