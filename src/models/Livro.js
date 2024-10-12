@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 const livroSchema = new mongoose.Schema(
   {
     id: { type: mongoose.Schema.Types.ObjectId },
-    titulo: { type: String, required: true },
-    editora: { type: String },
-    preco: { type: Number },
-    paginas: { type: Number },
+    titulo: { type: String, required: [true, 'obrigatorio'] },
+    editora: { type: String, required: [true, 'obrigatorio'] },
+    preco: { type: Number, required: [true, 'obrigatorio'] },
+    paginas: { type: Number, required: [true, 'obrigatorio'] },
   },
   { versionKey: false }
 );
