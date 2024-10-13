@@ -2,7 +2,7 @@ import { logHelper } from '../helpers/logHelper.js';
 import livros from '../models/Livro.js';
 
 class LivroController {
-  static async listarLivros(req, res) {
+  static async listar(req, res) {
     try {
       const listaLivros = await livros.find({});
       res.status(200).json(listaLivros);
@@ -25,7 +25,7 @@ class LivroController {
     }
   }
 
-  static async cadastrarLivro(req, res) {
+  static async cadastrar(req, res) {
     try {
       const livro = await livros.create(req.body);
       res.status(201).json(livro);
@@ -35,7 +35,7 @@ class LivroController {
     }
   }
 
-  static async atualizarLivro(req, res) {
+  static async atualizar(req, res) {
     try {
       const id = req.params.id;
       const livro = req.body;
@@ -50,7 +50,7 @@ class LivroController {
     }
   }
 
-  static async deletarLivro(req, res) {
+  static async deletar(req, res) {
     try {
       const id = req.params.id;
       await livros.findByIdAndDelete(id);
