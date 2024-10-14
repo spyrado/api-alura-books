@@ -5,6 +5,10 @@ import livros from '../models/Livro.js';
 class LivroController {
   static async listar(req, res) {
     try {
+      // COM EMBEDDING
+      // const listaLivros = await livros.find({});
+
+      // COM REFERECING
       const listaLivros = await livros.find({}).populate('autor').exec();
       res.status(200).json(listaLivros);
     } catch (error) {
@@ -28,9 +32,12 @@ class LivroController {
 
   static async cadastrar(req, res) {
     try {
+      // COM EMBEDDING
       // const { autor: autorId, ...novoLivro } = req.body;
       // const autor = await autores.findById(autorId);
       // const livro = await livros.create({ ...novoLivro, autor: autor._doc });
+
+      // COM REFERECING
       const livro = await livros.create(req.body);
       res.status(201).json(livro);
     } catch (error) {
