@@ -8,7 +8,11 @@ const livroSchema = new mongoose.Schema(
     editora: { type: String, required: [true, 'obrigatorio'] },
     preco: { type: Number, required: [true, 'obrigatorio'] },
     paginas: { type: Number, required: [true, 'obrigatorio'] },
-    autor: autorSchema,
+    autor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'autores',
+      required: true,
+    },
   },
   { versionKey: false }
 );

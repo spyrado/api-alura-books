@@ -5,7 +5,7 @@ import livros from '../models/Livro.js';
 class LivroController {
   static async listar(req, res) {
     try {
-      const listaLivros = await livros.find({});
+      const listaLivros = await livros.find({}).populate('autor').exec();
       res.status(200).json(listaLivros);
     } catch (error) {
       logHelper.show('ERRO AO TENTAR LISTAR LIVROS', error);
@@ -28,9 +28,10 @@ class LivroController {
 
   static async cadastrar(req, res) {
     try {
-      const { autor: autorId, ...novoLivro } = req.body;
-      const autor = await autores.findById(autorId);
-      const livro = await livros.create({ ...novoLivro, autor: autor._doc });
+      // const { autor: autorId, ...novoLivro } = req.body;
+      // const autor = await autores.findById(autorId);
+      // const livro = await livros.create({ ...novoLivro, autor: autor._doc });
+      const livro = await livros.create(req.body);
       res.status(201).json(livro);
     } catch (error) {
       res.status(500).send(error.message);
