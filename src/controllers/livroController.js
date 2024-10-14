@@ -1,4 +1,5 @@
 import { logHelper } from '../helpers/logHelper.js';
+import { autores } from '../models/Autor.js';
 import livros from '../models/Livro.js';
 
 class LivroController {
@@ -27,7 +28,9 @@ class LivroController {
 
   static async cadastrar(req, res) {
     try {
-      const livro = await livros.create(req.body);
+      const { autor: autorId, ...novoLivro } = req.body;
+      const autor = await autores.findById(autorId);
+      const livro = await livros.create({ ...novoLivro, autor: autor._doc });
       res.status(201).json(livro);
     } catch (error) {
       res.status(500).send(error.message);
