@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { logHelper } from '../helpers/logHelper.js';
 import { autores } from '../models/Autor.js';
 
@@ -20,8 +21,14 @@ class AutorController {
         ? res.status(200).json(autor)
         : res.status(404).send({ mensagem: 'Autor não encontrado.' });
     } catch (error) {
-      logHelper.show('ERRO AO TENTAR BUSCAR AUTORES POR ID', error);
-      res.status(500).json(error);
+      if (error instanceof mongoose.Error.CastError) {
+        res
+          .status(400)
+          .send({ message: 'Um ou mais dados fornecidos estão incorretos' });
+      } else {
+        logHelper.show('ERRO AO TENTAR BUSCAR AUTORES POR ID', error);
+        res.status(500).json(error);
+      }
     }
   }
 
