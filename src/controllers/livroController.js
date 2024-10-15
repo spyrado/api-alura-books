@@ -1,5 +1,4 @@
 import { logHelper } from '../helpers/logHelper.js';
-import { autores } from '../models/Autor.js';
 import livros from '../models/Livro.js';
 
 class LivroController {

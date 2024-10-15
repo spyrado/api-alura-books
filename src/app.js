@@ -6,7 +6,7 @@ import routes from './routes/index.js';
 const conexao = await conectaNaDatabase();
 
 conexao.on('error', (erro) => {
-  logHelper.show('ERRO AO TENTAR CONECTAR AO BANCO DE DADOS', error);
+  logHelper.show('ERRO AO TENTAR CONECTAR AO BANCO DE DADOS', erro);
 });
 
 conexao.once('open', () => {
