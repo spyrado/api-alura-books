@@ -1,8 +1,7 @@
-import { logHelper } from '../helpers/logHelper.js';
 import livros from '../models/Livro.js';
 
 class LivroController {
-  static async listar(req, res) {
+  static async listar(req, res, next) {
     try {
       // COM EMBEDDING
       // const listaLivros = await livros.find({});
@@ -11,12 +10,11 @@ class LivroController {
       const listaLivros = await livros.find({}).populate('autor').exec();
       res.status(200).json(listaLivros);
     } catch (error) {
-      logHelper.show('ERRO AO TENTAR LISTAR LIVROS', error);
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async buscarPorId(req, res) {
+  static async buscarPorId(req, res, next) {
     try {
       const id = req.params.id;
       const livro = await livros.findById(id);
@@ -24,12 +22,11 @@ class LivroController {
         ? res.status(200).json(livro)
         : res.status(404).send({ mensagem: 'Livro não encontrado.' });
     } catch (error) {
-      logHelper.show('ERRO AO TENTAR BUSCAR LIVROS POR ID', error);
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async cadastrar(req, res) {
+  static async cadastrar(req, res, next) {
     try {
       // COM EMBEDDING
       // const { autor: autorId, ...novoLivro } = req.body;
@@ -40,12 +37,11 @@ class LivroController {
       const livro = await livros.create(req.body);
       res.status(201).json(livro);
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR CADASTRAR LIVRO', error);
+      next(error);
     }
   }
 
-  static async atualizar(req, res) {
+  static async atualizar(req, res, next) {
     try {
       const id = req.params.id;
       const livro = req.body;
@@ -55,31 +51,28 @@ class LivroController {
       });
       res.status(200).json(livroAtualizado);
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR ATUALIZAR LIVRO', error);
+      next(error);
     }
   }
 
-  static async deletar(req, res) {
+  static async deletar(req, res, next) {
     try {
       const id = req.params.id;
       await livros.findByIdAndDelete(id);
       res.status(204).send();
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR DELETAR LIVRO', error);
+      next(error);
     }
   }
 
-  static async buscarLivroPorAutor(req, res) {
+  static async buscarLivroPorAutor(req, res, next) {
     try {
       const editora = req.query.editora;
       const regex = new RegExp(editora, 'i');
       const livro = await livros.find({ editora: regex });
       res.status(200).json(livro);
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR LISTAR LIVRO POR EDITORA', error);
+      next(error);
     }
   }
 }

@@ -1,19 +1,16 @@
-import mongoose from 'mongoose';
-import { logHelper } from '../helpers/logHelper.js';
 import { autores } from '../models/Autor.js';
 
 class AutorController {
-  static async listar(req, res) {
+  static async listar(req, res, next) {
     try {
       const listaAutores = await autores.find({});
       res.status(200).json(listaAutores);
     } catch (error) {
-      logHelper.show('ERRO AO TENTAR LISTAR AUTORES', error);
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async buscarPorId(req, res) {
+  static async buscarPorId(req, res, next) {
     try {
       const id = req.params.id;
       const autor = await autores.findById(id);
@@ -21,28 +18,20 @@ class AutorController {
         ? res.status(200).json(autor)
         : res.status(404).send({ mensagem: 'Autor não encontrado.' });
     } catch (error) {
-      if (error instanceof mongoose.Error.CastError) {
-        res
-          .status(400)
-          .send({ message: 'Um ou mais dados fornecidos estão incorretos' });
-      } else {
-        logHelper.show('ERRO AO TENTAR BUSCAR AUTORES POR ID', error);
-        res.status(500).json(error);
-      }
+      next(error);
     }
   }
 
-  static async cadastrar(req, res) {
+  static async cadastrar(req, res, next) {
     try {
       const autor = await autores.create(req.body);
       res.status(201).json(autor);
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR CADASTRAR AUTOR', error);
+      next(error);
     }
   }
 
-  static async atualizar(req, res) {
+  static async atualizar(req, res, next) {
     try {
       const id = req.params.id;
       const autor = req.body;
@@ -52,19 +41,17 @@ class AutorController {
       });
       res.status(200).json(autorAtualizado);
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR ATUALIZAR AUTOR', error);
+      next(error);
     }
   }
 
-  static async deletar(req, res) {
+  static async deletar(req, res, next) {
     try {
       const id = req.params.id;
       await autores.findByIdAndDelete(id);
       res.status(204).send();
     } catch (error) {
-      res.status(500).send(error.message);
-      logHelper.show('ERRO AO TENTAR DELETAR AUTOR', error);
+      next(error);
     }
   }
 }
