@@ -3,14 +3,14 @@ import mongoose from 'mongoose';
 const livroSchema = new mongoose.Schema(
   {
     id: { type: mongoose.Schema.Types.ObjectId },
-    titulo: { type: String, required: [true, 'obrigatorio'] },
-    editora: { type: String, required: [true, 'obrigatorio'] },
-    preco: { type: Number, required: [true, 'obrigatorio'] },
-    paginas: { type: Number, required: [true, 'obrigatorio'] },
+    titulo: { type: String, required: [true, 'Campo obrigatório.'] },
+    editora: { type: String, required: [true, 'Campo obrigatório.'] },
+    preco: { type: Number, required: [true, 'Campo obrigatório.'] },
+    paginas: { type: Number, required: [true, 'Campo obrigatório.'] },
     autor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'autores',
-      required: true,
+      required: [true, 'Campo obrigatório.'],
     },
   },
   { versionKey: false }
