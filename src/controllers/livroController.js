@@ -1,3 +1,4 @@
+import NaoEncontrado from '../erros/NaoEncontrado.js';
 import livros from '../models/Livro.js';
 
 class LivroController {
@@ -20,7 +21,7 @@ class LivroController {
       const livro = await livros.findById(id);
       livro
         ? res.status(200).json(livro)
-        : res.status(404).send({ mensagem: 'Livro não encontrado.' });
+        : next(new NaoEncontrado('Livro não encontrado.'));
     } catch (error) {
       next(error);
     }
@@ -49,7 +50,9 @@ class LivroController {
         new: true,
         runValidators: true,
       });
-      res.status(200).json(livroAtualizado);
+      livroAtualizado
+        ? res.status(200).json(livroAtualizado)
+        : next(new NaoEncontrado('Livro não encontrado.'));
     } catch (error) {
       next(error);
     }
@@ -58,8 +61,10 @@ class LivroController {
   static async deletar(req, res, next) {
     try {
       const id = req.params.id;
-      await livros.findByIdAndDelete(id);
-      res.status(204).send();
+      const livro = await livros.findByIdAndDelete(id);
+      livro
+        ? res.status(204).send()
+        : next(new NaoEncontrado('Livro não encontrado.'));
     } catch (error) {
       next(error);
     }

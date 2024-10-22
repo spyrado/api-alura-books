@@ -1,3 +1,4 @@
+import NaoEncontrado from '../erros/NaoEncontrado.js';
 import { autores } from '../models/Autor.js';
 
 class AutorController {
@@ -16,7 +17,7 @@ class AutorController {
       const autor = await autores.findById(id);
       autor
         ? res.status(200).json(autor)
-        : res.status(404).send({ mensagem: 'Autor não encontrado.' });
+        : next(new NaoEncontrado('Autor não encontrado.'));
     } catch (error) {
       next(error);
     }
@@ -39,7 +40,9 @@ class AutorController {
         new: true,
         runValidators: true,
       });
-      res.status(200).json(autorAtualizado);
+      autorAtualizado
+        ? res.status(200).json(autorAtualizado)
+        : next(new NaoEncontrado('Autor não encontrado.'));
     } catch (error) {
       next(error);
     }
@@ -48,9 +51,12 @@ class AutorController {
   static async deletar(req, res, next) {
     try {
       const id = req.params.id;
-      await autores.findByIdAndDelete(id);
-      res.status(204).send();
+      const autor = await autores.findByIdAndDelete(id);
+      autor
+        ? res.status(204).send()
+        : next(new NaoEncontrado('Autor não encontrado.'));
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
