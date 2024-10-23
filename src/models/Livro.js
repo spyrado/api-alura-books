@@ -16,7 +16,15 @@ const livroSchema = new mongoose.Schema(
         message: 'editora {VALUE} não permitida.',
       },
     }, // Limito as entradas desse campo ao que é colocado no array, algo
-    preco: { type: Number, required: [true, 'Campo obrigatório.'] },
+    preco: {
+      type: Number,
+      required: [true, 'Campo obrigatório.'],
+      validate: {
+        validator: (value) => value > 0,
+        message:
+          'O valor não pode ser igual ou menor que zero. O valor fornecido foi {VALUE}',
+      },
+    },
     paginas: {
       type: Number,
       min: [
